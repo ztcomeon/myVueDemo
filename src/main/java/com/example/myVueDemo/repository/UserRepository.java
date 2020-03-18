@@ -13,6 +13,8 @@ package com.example.myVueDemo.repository;
 import com.example.myVueDemo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,4 +33,6 @@ public interface UserRepository extends JpaRepository<UserEntity, String>, JpaSp
 
     List<UserEntity> findByUserName(String name);
 
+    @Query(value = "select * from vue_user u where u.user_name=:userName and u.password=:password", nativeQuery = true)
+    UserEntity findByNameAndPassword(@Param("userName") String name, @Param("password") String password);
 }

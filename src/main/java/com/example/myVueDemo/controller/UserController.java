@@ -11,12 +11,16 @@
 package com.example.myVueDemo.controller;
 
 
+import com.example.myVueDemo.controller.model.ResponseCode;
+import com.example.myVueDemo.controller.model.ResponseModel;
+import com.example.myVueDemo.entity.UserEntity;
 import com.example.myVueDemo.service.UserService;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 
 
 /**
@@ -34,12 +38,40 @@ public class UserController extends BaseController {
     UserService userService;
 
 
-    @RequestMapping(value = "/create", method = {RequestMethod.GET})
-    public void create() {
-
-
+    @RequestMapping(value = "/create", method = {RequestMethod.POST})
+    public ResponseModel create(@RequestBody UserEntity user) {
+        try {
+            UserEntity userEntity = userService.create(user);
+            return new ResponseModel(new Date().getTime(), userEntity, ResponseCode._200, "");
+        } catch (Exception e) {
+            return this.buildHttpReslutForException(e);
+        }
     }
 
+    @RequestMapping(value = "/getById", method = RequestMethod.GET)
+    public ResponseModel login1(String id) {
+        try {
+            UserEntity userEntity = userService.findById(id);
+            return new ResponseModel(new Date().getTime(), userEntity, ResponseCode._200, "");
+        } catch (Exception e) {
+            return this.buildHttpReslutForException(e);
+        }
+    }
 
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    public ResponseModel modifyUser(@ApiParam(value = "修改用户") @RequestBody UserEntity userEntity) {
+        try {
+            Validate.notNull(userEntity, "用户资料信息不能为空!");
+//            OperatorEntity operator = verifyLdapNodeLogin(opUser);
+//            Validate.notNull(operator, "当前登录用户不能为空!");
+//            if(null != userEntity){
+//                userEntity.modifyUser(operator);
+//            }
+            userService.modifyUser(userEntity);
+            return this.buildHttpReslut();
+        } catch (Exception e) {
+            return this.buildHttpReslutForException(e);
+        }
+    }
 
 }

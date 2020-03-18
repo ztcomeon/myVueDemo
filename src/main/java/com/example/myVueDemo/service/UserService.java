@@ -28,7 +28,12 @@ public interface UserService {
 
     List<UserEntity> findAll();
 
-    List<UserEntity> findById(String id);
+    UserEntity findById(String id);
 
     List<UserEntity> findByName(String name);
+
+    UserEntity modifyUser(UserEntity userEntity);
+
+    UserEntity findByNameAndPassword(String name,String password);
+
 }

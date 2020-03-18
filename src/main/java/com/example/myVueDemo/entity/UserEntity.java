@@ -24,7 +24,7 @@ import javax.persistence.Table;
  * @since 1.0.0
  */
 @Entity
-@Table(name = "solr_user")
+@Table(name = "vue_user")
 public class UserEntity extends UuidEntity {
 
     @Column(name = "user_name")

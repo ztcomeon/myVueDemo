@@ -14,6 +14,7 @@ package com.example.myVueDemo.service.internal;
 import com.example.myVueDemo.entity.UserEntity;
 import com.example.myVueDemo.repository.UserRepository;
 import com.example.myVueDemo.service.UserService;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,15 +49,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> findById(String id) {
-        List<UserEntity> users = (List<UserEntity>) userRepository.findById(id).get();
-        return users;
+    public UserEntity findById(String id) {
+//        List<UserEntity> users = (List<UserEntity>) userRepository.findById(id).get();
+        //getOne返回的是代理对象
+//        UserEntity userEntity = userRepository.getOne(id);
+        UserEntity userEntity = userRepository.findById(id).orElse(null);
+
+        return userEntity;
     }
 
     @Override
     public List<UserEntity> findByName(String name) {
-//        List<UserEntity> users = userRepository.findByUserName(name);
-//        return users;
-        return null;
+        List<UserEntity> users = userRepository.findByUserName(name);
+        return users;
+    }
+
+    @Transactional
+    @Override
+    public UserEntity modifyUser(UserEntity userEntity) {
+        //修改用户信息
+        Validate.notNull(userEntity, "修改用户时，用户信息不能为空");
+        Validate.notBlank(userEntity.getId(), "修改用户时，用户信息不能为空");
+        UserEntity oldUser = this.findById(userEntity.getId());
+        Validate.notNull(oldUser, "无法获取到该用户");
+        oldUser.setUserName(userEntity.getUserName());
+        oldUser.setPassword(userEntity.getPassword());
+        oldUser.setUserAge(userEntity.getUserAge());
+        return userRepository.saveAndFlush(oldUser);
+    }
+
+    @Override
+    public UserEntity findByNameAndPassword(String name, String password) {
+        UserEntity userEntity = null;
+        userEntity = userRepository.findByNameAndPassword(name, password);
+        return userEntity;
     }
 }
