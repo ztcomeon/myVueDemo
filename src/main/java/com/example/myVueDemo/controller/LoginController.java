@@ -34,7 +34,6 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/api")
 public class LoginController extends BaseController {
 
     @Autowired

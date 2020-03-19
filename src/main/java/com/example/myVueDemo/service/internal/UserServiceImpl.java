@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity create(UserEntity userEntity) {
-
+        Validate.notNull(userEntity, "新增对象不能为空");
         return userRepository.save(userEntity);
     }
 

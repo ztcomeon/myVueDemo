@@ -32,6 +32,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 @RestController
+@RequestMapping("/user")
 public class UserController extends BaseController {
 
     @Autowired
